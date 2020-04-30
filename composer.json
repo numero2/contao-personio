@@ -1,6 +1,8 @@
 {
     "name": "numero2/contao-personio-bundle",
     "type": "contao-bundle",
+    "description": "Import for job applications from Personio",
+    "license": "Commercial",
     "require": {
         "contao/core-bundle": "^4.4.0"
     },
