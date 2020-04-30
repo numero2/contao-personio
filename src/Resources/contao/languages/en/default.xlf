@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+<file datatype="php" original="src/Resources/contao/languages/en/default.php" source-language="en">
+<body>
+    <!-- MESSAGES -->
+    <trans-unit id="PERSONIO.MSG.import_success">
+        <source>Applications imported successfully. %d new applications, %d updated.</source>
+    </trans-unit>
+    <trans-unit id="PERSONIO.MSG.import_error">
+        <source>There was a problem importing new applications.</source>
+    </trans-unit>
+</body>
+</file>
+</xliff>

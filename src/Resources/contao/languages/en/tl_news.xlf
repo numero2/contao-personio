@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xliff version="1.1">
+<file datatype="php" original="src/Resources/contao/languages/en/tl_news.php" source-language="en">
+<body>
+    <!-- BUTTONS -->
+    <trans-unit id="tl_news.personio_import.0">
+        <source>Personio Import</source>
+    </trans-unit>
+    <trans-unit id="tl_news.personio_import.1">
+        <source>Trigger a new import of job applications</source>
+    </trans-unit>
+</body>
+</file>
+</xliff>
