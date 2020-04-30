@@ -147,6 +147,10 @@ class Importer extends Controller {
 
             if( $oXML->position ) {
 
+                if( !is_array($oXML->position) ) {
+                    $oXML->position = [ $oXML->position ];
+                }
+
                 foreach( $oXML->position as $position ) {
 
                     $status = $this->importPosition($archiveID, $position);
