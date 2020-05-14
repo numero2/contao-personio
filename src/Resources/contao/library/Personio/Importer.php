@@ -134,6 +134,10 @@ class Importer extends Controller {
 
         if( $sXML ) {
 
+            // hide all job listing in current archive to make sure deleted
+            // listings are not shown anymore
+            Database::getInstance()->query("UPDATE ".NewsModel::getTable()." SET published = 0 WHERE personio_id != '' AND pid = '".$archiveID."'");
+
             $oXML = NULL;
             $oXML = simplexml_load_string($sXML, 'SimpleXMLElement', LIBXML_NOCDATA);
             $sXML = json_encode($oXML);
@@ -237,15 +241,17 @@ class Importer extends Controller {
 
                         $oContent = NULL;
 
+                        // prepare / clean description text
+                        $text = $this->cleanMarkup($d->value);
+
+                        // use first description only for teaser
                         if( $i === 0 ) {
 
-                            // use first description for teaser
-                            $oNews->teaser = trim($d->value);
+                            $oNews->teaser = $text;
 
                             // make sure we have an id to work with
                             if( !$oNews->id ) {
                                 $oNews->save();
-                                $oNews->published = true;
                             }
 
                             // find old content elements
@@ -256,6 +262,8 @@ class Importer extends Controller {
                                 ,   [NewsModel::getTable(), $oNews->id, 'text']
                                 );
                             }
+
+                            continue;
                         }
 
                         // use the nth old element …
@@ -279,7 +287,7 @@ class Importer extends Controller {
                         ,   'value' => $d->name
                         ]);
 
-                        $oContent->text = trim($d->value);
+                        $oContent->text = $text;
 
                         $oContent->save();
                     }
@@ -287,6 +295,7 @@ class Importer extends Controller {
             }
         }
 
+        $oNews->published = true;
         $oNews->save();
 
         if( $isUpdate ) {
@@ -294,5 +303,25 @@ class Importer extends Controller {
         } else {
             return self::STATUS_NEW;
         }
+    }
+
+
+    /**
+     * Make sure the given string contains proper markup
+     *
+     * @param string $strContent
+     *
+     * @return string
+     */
+    private function cleanMarkup( string $strContent ): string {
+
+        $strContent = trim($strContent);
+
+        // make sure "text-only" is encapsuled in a <p>
+        if( substr($strContent, 0, 1) != '<' ) {
+            $strContent = '<p>'.$strContent.'</p>';
+        }
+
+        return $strContent;
     }
 }
