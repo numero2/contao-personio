@@ -12,14 +12,16 @@
  * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
  */
 
+use \numero2\PersonioBundle\Importer;
+
 
 /**
  * BACK END MODULES
  */
-$GLOBALS['BE_MOD']['content']['news']['personio_import'] = [\numero2\PersonioBundle\Importer::class, 'run'];
+$GLOBALS['BE_MOD']['content']['news']['personio_import'] = [Importer::class, 'run'];
 
 
 /**
  * CRONJOBS
  */
-$GLOBALS['TL_CRON']['daily'][] = [\numero2\PersonioBundle\Importer::class, 'run'];
+$GLOBALS['TL_CRON']['daily'][] = [Importer::class, 'run'];

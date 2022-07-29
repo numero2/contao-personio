@@ -3,13 +3,13 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2020 Leo Feyer
+ * Copyright (c) 2005-2022 Leo Feyer
  *
  * @package   Personio Bundle
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright 2020 numero2 - Agentur für digitales Marketing GbR
+ * @copyright 2022 numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -43,9 +43,9 @@ class Importer extends Controller {
         // get current archive
         if( TL_MODE == 'BE' ) {
 
-            if( $archive = \Input::get('id') ) {
+            if( $archive = Input::get('id') ) {
 
-                $oArchive = NULL;
+                $oArchive = null;
                 $oArchive = NewsArchiveModel::findById($archive);
 
                 if( $oArchive && $oArchive->personio_xml_uri ) {
@@ -56,7 +56,7 @@ class Importer extends Controller {
         // iterate all archives
         } else {
 
-            $oArchives = NULL;
+            $oArchives = null;
             $oArchives = NewsArchiveModel::findBy(["personio_xml_uri!=''"],null);
 
             if( $oArchives ) {
@@ -101,8 +101,6 @@ class Importer extends Controller {
 
         if( TL_MODE == 'BE' ) {
             $this->redirect($this->getReferer());
-        } else {
-
         }
     }
 
@@ -138,7 +136,7 @@ class Importer extends Controller {
             // listings are not shown anymore
             Database::getInstance()->query("UPDATE ".NewsModel::getTable()." SET published = 0 WHERE personio_id != '' AND pid = '".$archiveID."'");
 
-            $oXML = NULL;
+            $oXML = null;
             $oXML = simplexml_load_string($sXML, 'SimpleXMLElement', LIBXML_NOCDATA);
             $sXML = json_encode($oXML);
             $oXML = json_decode($sXML);
@@ -183,13 +181,13 @@ class Importer extends Controller {
         $this->import('Database');
 
         // find existing news...
-        $oNews = NULL;
+        $oNews = null;
         $oNews = NewsModel::findOneBy(['pid=?','personio_id=?'],[$archiveID,$position->id]);
 
         //... or create a new one
         if( !$oNews ) {
 
-            $oArchive = NULL;
+            $oArchive = null;
             $oArchive = NewsArchiveModel::findById($archiveID);
 
             $oNews = new NewsModel();
@@ -215,7 +213,6 @@ class Importer extends Controller {
             // location
             } else if( $key == 'office' ) {
 
-                // TODO: location field might not exist
                 if( $this->Database->fieldExists('location', NewsModel::getTable()) ) {
                     $oNews->location = $value;
                 }
@@ -235,11 +232,11 @@ class Importer extends Controller {
 
                 if( !empty($value->jobDescription) ) {
 
-                    $oOldCTE = NULL;
+                    $oOldCTE = null;
 
                     foreach( $value->jobDescription as $i => $d ) {
 
-                        $oContent = NULL;
+                        $oContent = null;
 
                         // prepare / clean description text
                         $text = $this->cleanMarkup($d->value);
@@ -290,12 +287,25 @@ class Importer extends Controller {
                         $oContent->text = $text;
 
                         $oContent->save();
+
+                        // add reference to the save content element for later use in hooks
+                        $d->contentElementID = $oContent->id;
                     }
                 }
             }
         }
 
         $oNews->published = true;
+
+        // HOOK: add custom logic
+        if( isset($GLOBALS['TL_HOOKS']['parsePersonioPosition']) && \is_array($GLOBALS['TL_HOOKS']['parsePersonioPosition']) ) {
+
+            foreach( $GLOBALS['TL_HOOKS']['parsePersonioPosition'] as $callback ) {
+                $this->import($callback[0]);
+                $this->{$callback[0]}->{$callback[1]}($oNews,$position,$isUpdate);
+            }
+        }
+
         $oNews->save();
 
         if( $isUpdate ) {
