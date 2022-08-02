@@ -8,7 +8,7 @@
     </trans-unit>
     <!-- FIELDS -->
     <trans-unit id="tl_news_archive.personio_enable_import.0">
-        <source>Enable import</source>
+        <source>Enable Personio import</source>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_enable_import.1">
         <source>Enable the import of job applications from Personio.</source>

@@ -210,29 +210,29 @@ class Importer extends Controller {
 
                 $oNews->headline = $value;
 
-            // location
-            } else if( $key == 'office' ) {
-
-                if( $this->Database->fieldExists('location', NewsModel::getTable()) ) {
-                    $oNews->location = $value;
-                }
-
             // tstamp
             } else if( $key == 'createdAt' ) {
 
                 $oNews->date = $oNews->time = strtotime($value);
-
-            // subheadline
-            } else if( $key == 'recruitingCategory' ) {
-
-                //$oNews->subheadline = $value;
 
             // descriptions
             } else if( $key == 'jobDescriptions' ) {
 
                 if( !empty($value->jobDescription) ) {
 
+                    // make sure we have an id to work with
+                    if( !$oNews->id ) {
+                        $oNews->save();
+                    }
+
                     $oOldCTE = null;
+                    $oOldCTE = ContentModel::findBy(
+                        ['ptable=?','pid=?','type=?']
+                    ,   [NewsModel::getTable(), $oNews->id, 'text']
+                    ,   ['order' => 'sorting ASC']
+                    );
+
+                    $sorting = 128;
 
                     foreach( $value->jobDescription as $i => $d ) {
 
@@ -240,28 +240,6 @@ class Importer extends Controller {
 
                         // prepare / clean description text
                         $text = $this->cleanMarkup($d->value);
-
-                        // use first description only for teaser
-                        if( $i === 0 ) {
-
-                            $oNews->teaser = $text;
-
-                            // make sure we have an id to work with
-                            if( !$oNews->id ) {
-                                $oNews->save();
-                            }
-
-                            // find old content elements
-                            if( !$oOldCTE ) {
-
-                                $oOldCTE = ContentModel::findBy(
-                                    ['ptable=?','pid=?','type=?']
-                                ,   [NewsModel::getTable(), $oNews->id, 'text']
-                                );
-                            }
-
-                            continue;
-                        }
 
                         // use the nth old element …
                         if( $oOldCTE && $oOldCTE->next() ) {
@@ -274,13 +252,14 @@ class Importer extends Controller {
                             $oContent = new ContentModel();
                             $oContent->ptable = NewsModel::getTable();
                             $oContent->pid = $oNews->id;
+                            $oContent->sorting = $sorting;
                         }
 
                         $oContent->tstamp = time();
                         $oContent->type = 'text';
 
                         $oContent->headline = serialize([
-                            'unit' => 'h3'
+                            'unit' => 'h2'
                         ,   'value' => $d->name
                         ]);
 
@@ -290,6 +269,8 @@ class Importer extends Controller {
 
                         // add reference to the save content element for later use in hooks
                         $d->contentElementID = $oContent->id;
+
+                        $sorting+=128;
                     }
                 }
             }

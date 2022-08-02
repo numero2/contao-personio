@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_news_archive']['fields'] = array_merge(
             'label'        => &$GLOBALS['TL_LANG']['tl_news_archive']['personio_xml_uri']
         ,   'exclude'      => true
         ,   'inputType'    => 'text'
-        ,   'eval'         => ['mandatory'=>true, 'placeholder'=>'https://yourname.personio.de/xml', 'tl_class'=>'w50']
+        ,   'eval'         => ['mandatory'=>true, 'placeholder'=>'https://yourname.personio.de/xml', 'tl_class'=>'w50', 'decodeEntities'=>true]
         ,   'sql'          => "varchar(255) NOT NULL default ''"
         ]
     ,   'personio_author' => [
