@@ -267,7 +267,7 @@ class Importer extends Controller {
 
                         $oContent->save();
 
-                        // add reference to the save content element for later use in hooks
+                        // add reference to the saved ContentElement for later use in Hooks
                         $d->contentElementID = $oContent->id;
 
                         $sorting+=128;

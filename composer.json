@@ -1,7 +1,7 @@
 {
     "name": "numero2/contao-personio-bundle",
     "type": "contao-bundle",
-    "description": "Import for job applications from Personio as news",
+    "description": "Import job applications from Personio as news",
     "license": "Commercial",
     "require": {
         "contao/core-bundle": "^4.9"
