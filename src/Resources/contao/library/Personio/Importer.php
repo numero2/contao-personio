@@ -57,7 +57,12 @@ class Importer extends Controller {
         } else {
 
             $oArchives = null;
-            $oArchives = NewsArchiveModel::findBy(["personio_xml_uri!=''"],null);
+
+            if( class_exists("Terminal42\ChangeLanguage\Terminal42ChangeLanguageBundle") ) {
+                $oArchives = NewsArchiveModel::findBy(["personio_xml_uri!=''"], null, ['order'=>'master ASC']);
+            } else {
+                $oArchives = NewsArchiveModel::findBy(["personio_xml_uri!=''"], null);
+            }
 
             if( $oArchives ) {
 
