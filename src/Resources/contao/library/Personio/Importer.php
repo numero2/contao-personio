@@ -180,27 +180,27 @@ class Importer extends Controller {
 
         $this->import('Database');
 
+        $archive = null;
+        $archive = NewsArchiveModel::findById($archiveID);
+
         // find existing news...
-        $oNews = null;
-        $oNews = NewsModel::findOneBy(['pid=?','personio_id=?'],[$archiveID,$position->id]);
+        $news = null;
+        $news = NewsModel::findOneBy(['pid=?','personio_id=?'],[$archiveID,$position->id]);
 
         //... or create a new one
-        if( !$oNews ) {
+        if( !$news ) {
 
-            $oArchive = null;
-            $oArchive = NewsArchiveModel::findById($archiveID);
+            $news = new NewsModel();
 
-            $oNews = new NewsModel();
-
-            $oNews->pid = $archiveID;
-            $oNews->personio_id = $position->id;
-            $oNews->tstamp = time();
-            $oNews->author = $oArchive->personio_author;
-            $oNews->source = 'default';
-            $oNews->published = false;
+            $news->pid = $archiveID;
+            $news->personio_id = $position->id;
+            $news->tstamp = time();
+            $news->author = $archive->personio_author;
+            $news->source = 'default';
+            $news->published = false;
         }
 
-        $isUpdate = (bool) $oNews->id;
+        $isUpdate = (bool) $news->id;
 
         // iterate all properties
         foreach( $position as $key => $value ) {
@@ -208,12 +208,12 @@ class Importer extends Controller {
             // title
             if( $key == 'name' ) {
 
-                $oNews->headline = $value;
+                $news->headline = $value;
 
             // tstamp
             } else if( $key == 'createdAt' ) {
 
-                $oNews->date = $oNews->time = strtotime($value);
+                $news->date = $news->time = strtotime($value);
 
             // descriptions
             } else if( $key == 'jobDescriptions' ) {
@@ -221,14 +221,14 @@ class Importer extends Controller {
                 if( !empty($value->jobDescription) ) {
 
                     // make sure we have an id to work with
-                    if( !$oNews->id ) {
-                        $oNews->save();
+                    if( !$news->id ) {
+                        $news->save();
                     }
 
                     $oOldCTE = null;
                     $oOldCTE = ContentModel::findBy(
                         ['ptable=?','pid=?','type=?']
-                    ,   [NewsModel::getTable(), $oNews->id, 'text']
+                    ,   [NewsModel::getTable(), $news->id, 'text']
                     ,   ['order' => 'sorting ASC']
                     );
 
@@ -251,7 +251,7 @@ class Importer extends Controller {
 
                             $oContent = new ContentModel();
                             $oContent->ptable = NewsModel::getTable();
-                            $oContent->pid = $oNews->id;
+                            $oContent->pid = $news->id;
                             $oContent->sorting = $sorting;
                         }
 
@@ -276,18 +276,29 @@ class Importer extends Controller {
             }
         }
 
-        $oNews->published = true;
+        $news->published = true;
+
+        // set entry in main language
+        if( class_exists("Terminal42\ChangeLanguage\Terminal42ChangeLanguageBundle") && !empty($archive->master) ) {
+
+            $newsMainLang = null;
+            $newsMainLang = NewsModel::findOneBy(['pid=?','personio_id=?'],[$archive->master,$position->id]);
+
+            if( $newsMainLang ) {
+                $news->languageMain = $newsMainLang->id;
+            }
+        }
 
         // HOOK: add custom logic
         if( isset($GLOBALS['TL_HOOKS']['parsePersonioPosition']) && \is_array($GLOBALS['TL_HOOKS']['parsePersonioPosition']) ) {
 
             foreach( $GLOBALS['TL_HOOKS']['parsePersonioPosition'] as $callback ) {
                 $this->import($callback[0]);
-                $this->{$callback[0]}->{$callback[1]}($oNews,$position,$isUpdate);
+                $this->{$callback[0]}->{$callback[1]}($news,$position,$isUpdate);
             }
         }
 
-        $oNews->save();
+        $news->save();
 
         if( $isUpdate ) {
             return self::STATUS_UPDATE;
