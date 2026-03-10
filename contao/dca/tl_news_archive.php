@@ -1,26 +1,22 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Personio Bundle for Contao Open Source CMS
  *
- * Copyright (c) 2005-2022 Leo Feyer
- *
- * @package   Personio Bundle
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
+ * @author    Christopher Brandt <christopher.brandt@numero2.de>
  * @license   Commercial
- * @copyright 2022 numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2026, numero2 - Agentur für digitales Marketing GbR
  */
 
 
 /**
  * Modify palette of tl_news_archive
  */
-$GLOBALS['TL_DCA']['tl_news_archive']['palettes']['default'] = str_replace(
-    ';{protected_legend'
+$GLOBALS['TL_DCA']['tl_news_archive']['palettes']['default'] = str_replace(';{protected_legend'
 ,   ';{personio_legend},personio_enable_import;{protected_legend'
-,   $GLOBALS['TL_DCA']['tl_news_archive']['palettes']['default']
-);
+,   $GLOBALS['TL_DCA']['tl_news_archive']['palettes']['default']);
 
 $GLOBALS['TL_DCA']['tl_news_archive']['palettes']['__selector__'][] = 'personio_enable_import';
 $GLOBALS['TL_DCA']['tl_news_archive']['subpalettes']['personio_enable_import'] = 'personio_xml_uri,personio_author';
@@ -29,8 +25,7 @@ $GLOBALS['TL_DCA']['tl_news_archive']['subpalettes']['personio_enable_import'] =
 /**
  * Add fields to tl_news_archive
  */
-$GLOBALS['TL_DCA']['tl_news_archive']['fields'] = array_merge(
-    $GLOBALS['TL_DCA']['tl_news_archive']['fields']
+$GLOBALS['TL_DCA']['tl_news_archive']['fields'] = array_merge($GLOBALS['TL_DCA']['tl_news_archive']['fields']
 ,   [
         'personio_enable_import' => [
             'label'        => &$GLOBALS['TL_LANG']['tl_news_archive']['personio_enable_import']
@@ -57,5 +52,4 @@ $GLOBALS['TL_DCA']['tl_news_archive']['fields'] = array_merge(
         ,   'eval'         => ['mandatory'=>true, 'doNotCopy'=>true, 'chosen'=>true, 'includeBlankOption'=>true, 'tl_class'=>'w50']
         ,   'sql'          => "int(10) unsigned NOT NULL default 0"
         ]
-    ]
-);
+    ]);

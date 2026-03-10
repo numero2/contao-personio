@@ -4,7 +4,7 @@
     "description": "Import job applications from Personio as news",
     "license": "Commercial",
     "require": {
-        "contao/core-bundle": "^4.9"
+        "contao/core-bundle": "^4.13 || ^5.3"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0"
@@ -21,13 +21,19 @@
             "numero2\\PersonioBundle\\": "src/"
         },
         "classmap": [
-            "src/Resources/contao/"
+            "contao/"
         ],
         "exclude-from-classmap": [
-            "src/Resources/contao/config/",
-            "src/Resources/contao/dca/",
-            "src/Resources/contao/languages/",
-            "src/Resources/contao/templates/"
+            "contao/config/",
+            "contao/dca/",
+            "contao/languages/"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "php-http/discovery": false,
+            "contao/manager-plugin": false
+        }
     }
 }

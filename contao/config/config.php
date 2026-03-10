@@ -10,17 +10,16 @@
  * @copyright Copyright (c) 2026, numero2 - Agentur für digitales Marketing GbR
  */
 
-
-namespace numero2\PersonioBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use \numero2\PersonioBundle\Importer;
 
 
-class PersonioBundle extends Bundle {
+/**
+ * BACK END MODULES
+ */
+$GLOBALS['BE_MOD']['content']['news']['personio_import'] = ['numero2_personio.import.personio', 'importCurrentArchive'];
 
 
-    public function getPath(): string {
-
-        return \dirname(__DIR__);
-    }
-}
+/**
+ * CRONJOBS
+ */
+$GLOBALS['TL_CRON']['daily'][] = ['numero2_personio.import.personio', 'importCurrentArchive'];

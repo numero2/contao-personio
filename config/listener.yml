@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autoconfigure: true
+        public: true
+
+
+    numero2_personio.listener.data_container.news:
+        class: numero2\PersonioBundle\EventListener\DataContainer\NewsListener
+        arguments:
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'

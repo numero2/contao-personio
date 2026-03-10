@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+<file>
+<body>
+    <!-- MESSAGES -->
+    <trans-unit id="personio.msg.import_success">
+        <target>Applications imported successfully. %d new applications, %d updated.</target>
+    </trans-unit>
+    <trans-unit id="personio.msg.import_error">
+        <target>There was a problem importing new applications.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

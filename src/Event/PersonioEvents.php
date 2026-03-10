@@ -11,16 +11,15 @@
  */
 
 
-namespace numero2\PersonioBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace numero2\PersonioBundle\Event;
 
 
-class PersonioBundle extends Bundle {
+final class PersonioEvents {
 
-
-    public function getPath(): string {
-
-        return \dirname(__DIR__);
-    }
+    /**
+     * The contao.tags_get_list is triggered whenever we need a list of tags.
+     *
+     * @see numero2\PersonioBundle\Event\PersonioParseEvent
+     */
+    public const IMPORT_ADVERTISEMENT = 'contao.personio_import_advertisement';
 }

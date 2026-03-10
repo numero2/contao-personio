@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 <xliff version="1.1">
-<file datatype="php" original="src/Resources/contao/languages/en/tl_news_archive.php" source-language="en">
+<file>
 <body>
     <!-- LEGENDS -->
     <trans-unit id="tl_news_archive.personio_legend">
-        <source>Personio Import</source>
+        <target>Personio Import</target>
     </trans-unit>
     <!-- FIELDS -->
     <trans-unit id="tl_news_archive.personio_enable_import.0">
-        <source>Enable Personio import</source>
+        <target>Enable Personio import</target>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_enable_import.1">
-        <source>Enable the import of job applications from Personio.</source>
+        <target>Enable the import of job applications from Personio.</target>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_xml_uri.0">
-        <source>XML Endpoint</source>
+        <target>XML Endpoint</target>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_xml_uri.1">
-        <source>Please define the URI to the XML.</source>
+        <target>Please define the URI to the XML.</target>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_author.0">
-        <source>Author</source>
+        <target>Author</target>
     </trans-unit>
     <trans-unit id="tl_news_archive.personio_author.1">
-        <source>Here you can change the author which will be set for all imported applications.</source>
+        <target>Here you can change the author which will be set for all imported applications.</target>
     </trans-unit>
 </body>
 </file>

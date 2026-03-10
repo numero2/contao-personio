@@ -11,16 +11,14 @@
  */
 
 
-namespace numero2\PersonioBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-
-class PersonioBundle extends Bundle {
-
-
-    public function getPath(): string {
-
-        return \dirname(__DIR__);
-    }
-}
+/**
+ * Add fields to tl_news
+ */
+$GLOBALS['TL_DCA']['tl_news']['fields'] = array_merge($GLOBALS['TL_DCA']['tl_news']['fields']
+,   [
+    'personio_id' => [
+            'exclude'      => true
+        ,   'inputType'    => 'text'
+        ,   'sql'          => "varchar(255) NOT NULL default ''"
+        ]
+    ]);

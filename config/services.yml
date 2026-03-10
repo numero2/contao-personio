@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    numero2_personio.import.personio:
+        class: numero2\PersonioBundle\Import\PersonioImport
+        public: true
+        arguments:
+            - '@contao.framework'
+            - '@database_connection'
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'
+            - '@logger'
+            - '@translator'
+            - '@event_dispatcher'
