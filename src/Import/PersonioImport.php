@@ -235,7 +235,7 @@ class PersonioImport {
                 self::STATUS_UPDATE => 0,
             ];
 
-            if( $oXML->position ) {
+            if( !empty($oXML->position) ) {
 
                 if( !is_array($oXML->position) ) {
                     $oXML->position = [$oXML->position];
